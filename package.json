@@ -1,0 +1,14 @@
+{
+  "name": "ace-english-parent-feedback",
+  "version": "1.0.0",
+  "description": "Automated WhatsApp parent feedback report generator for Ace English synced with Google Sheets and Malaysian PBD TP1-TP6 levels.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
