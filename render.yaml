@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: ace-english-feedback
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: "10000"
+      - key: NODE_ENV
+        value: production
+      - key: GOOGLE_SHEET_URL
+        sync: false
+        value: https://docs.google.com/spreadsheets/d/1yGA39MI21udHHl4hEfN7_i7O5XNfA2hutUyUICntnoQ/edit?usp=sharing
