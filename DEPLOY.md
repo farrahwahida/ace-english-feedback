@@ -6,7 +6,7 @@ The dashboard is deployed live on **GitHub Pages** at:
 
 ## How it works
 
-- **Frontend:** GitHub Pages serves `public/` (HTML/CSS/JS) for free.
+- **Frontend:** GitHub Pages serves the `docs/` folder (HTML/CSS/JS) for free.
 - **Backend:** A Google Apps Script Web App (deployed from the user's Google account, "Execute as: Me", "Who has access: Anyone") reads/writes the Ace English Google Sheet and stores generated reports in a `FeedbackReports` tab.
 - **Data flow:** The website calls the Web App with JSONP (`action=getData`, `action=saveReport`, `action=deleteReport`) because `script.google.com` does not allow cross-origin fetch.
 - **Generation:** Reports are created in the browser by the built-in TP1–TP6 template engine (`public/tp-engine.js`), so no API key or server is needed. Report text and "Sent" status are saved back into the Google Sheet.
@@ -21,7 +21,7 @@ Apps Script source: `apps-script/Code.gs`. Script ID: `1INU8O4zoNHRwhTKfjlXsLd8L
 
 ## Updating the live website
 
-Push to `main`. The GitHub Actions workflow (`.github/workflows/deploy-pages.yml`) redeploys automatically.
+Push to `main`. GitHub Pages watches the branch and redeploys automatically (source: `main` / `docs`).
 
 ## Local development
 
