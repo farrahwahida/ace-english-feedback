@@ -17,7 +17,9 @@ The dashboard is deployed live on **GitHub Pages** at:
 https://script.google.com/macros/s/AKfycbwLTA-bzKVPFFof5X-mwMcX9Txt1HkpKW01Da3Dcveh6KTFqlTPblOl5Hl1wnpciAI0/exec
 ```
 
-Apps Script source: `apps-script/Code.gs`. Script ID: `1INU8O4zoNHRwhTKfjlXsLd8L5DtDKZ0BG6tsou5CYWabC7BqttXoL7Qw`.
+Apps Script source: `apps-script/Code.gs` (the live `ACCESS_KEY` is deliberately **not** stored in this public repo — the committed file has a placeholder). Script ID: `1INU8O4zoNHRwhTKfjlXsLd8L5DtDKZ0BG6tsou5CYWabC7BqttXoL7Qw`.
+
+The dashboard asks for the access key on first load and stores it only in that browser's `localStorage`. It can also be changed in **Settings → Dashboard Access Key**.
 
 ## Updating the live website
 

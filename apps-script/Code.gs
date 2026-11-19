@@ -9,7 +9,8 @@
 const SHEET_ID = '1yGA39MI21udHHl4hEfN7_i7O5XNfA2hutUyUICntnoQ';
 const REPORT_SHEET = 'FeedbackReports';
 // Only the live dashboard knows this key. Keep it out of the public repo.
-const ACCESS_KEY = 'ace-fb-ee1dd37f112100a291ab67e1';
+// The live secret is NOT stored in this public repo. Replace this placeholder only if you redeploy your own copy.
+const ACCESS_KEY = 'REPLACE_WITH_SECRET_KEY';
 const REPORT_HEADERS = [
   'ID',
   'Student',
