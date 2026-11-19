@@ -156,6 +156,10 @@ function jsonp(action, params = {}) {
 }
 
 function staticSaveReport(entry, text, engine, language, status) {
+  if (!entry.id) {
+    entry.id =
+      'manual_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7);
+  }
   return jsonp('saveReport', {
     id: entry.id,
     studentName: capitalizeName(entry.studentName),
@@ -203,7 +207,12 @@ async function staticApi(url, options = {}) {
   }
 
   if (url === '/api/generate') {
-    const entry = body.entry;
+    const entry = { ...body.entry };
+    // Quick Class Entry has no ID yet — create one before saving the report.
+    if (!entry.id) {
+      entry.id =
+        'manual_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7);
+    }
     const result = window.TPEngine.generateTemplateReport(entry, staticConfig());
     await staticSaveReport(entry, result.text, result.engine, result.language, 'ready');
     return {
