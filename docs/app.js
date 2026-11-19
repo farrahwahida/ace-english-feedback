@@ -71,6 +71,7 @@ const els = {
   cfgSheetUrl: document.getElementById('cfgSheetUrl'),
   cfgBrandName: document.getElementById('cfgBrandName'),
   cfgTutorName: document.getElementById('cfgTutorName'),
+  cfgAccessKey: document.getElementById('cfgAccessKey'),
   cfgAiProvider: document.getElementById('cfgAiProvider'),
   geminiFields: document.getElementById('geminiFields'),
   cfgGeminiKey: document.getElementById('cfgGeminiKey'),
@@ -92,6 +93,7 @@ const IS_STATIC =
 const APPS_SCRIPT_URL =
   'https://script.google.com/macros/s/AKfycbwLTA-bzKVPFFof5X-mwMcX9Txt1HkpKW01Da3Dcveh6KTFqlTPblOl5Hl1wnpciAI0/exec';
 const LOCAL_CONFIG_KEY = 'aceEnglishFeedbackConfig';
+const ACCESS_KEY_STORAGE = 'aceEnglishAccessKey';
 
 function staticConfig() {
   let saved = {};
@@ -104,6 +106,7 @@ function staticConfig() {
     sheetUrl: saved.sheetUrl || '',
     brandName: saved.brandName || 'Ace English',
     tutorName: saved.tutorName || '',
+    accessKey: localStorage.getItem(ACCESS_KEY_STORAGE) || '',
     aiProvider: 'none',
     hasGeminiKey: false,
     geminiApiKeyMasked: '',
@@ -122,6 +125,7 @@ function jsonp(action, params = {}) {
     const url = new URL(APPS_SCRIPT_URL);
     url.searchParams.set('action', action);
     url.searchParams.set('callback', cbName);
+    url.searchParams.set('key', localStorage.getItem(ACCESS_KEY_STORAGE) || '');
     Object.keys(params).forEach((key) => {
       if (params[key] !== undefined && params[key] !== null) {
         url.searchParams.set(key, params[key]);
@@ -173,6 +177,10 @@ async function staticApi(url, options = {}) {
       ['brandName', 'tutorName', 'sheetUrl'].forEach((k) => {
         if (body[k] !== undefined) next[k] = body[k];
       });
+      if (body.accessKey !== undefined) {
+        localStorage.setItem(ACCESS_KEY_STORAGE, String(body.accessKey).trim());
+        next.accessKey = String(body.accessKey).trim();
+      }
       localStorage.setItem(LOCAL_CONFIG_KEY, JSON.stringify(next));
       return { config: next };
     }
@@ -596,6 +604,7 @@ function populateSettingsModal(cfg) {
   els.cfgSheetUrl.value = cfg.sheetUrl || '';
   els.cfgBrandName.value = cfg.brandName || 'Ace English';
   els.cfgTutorName.value = cfg.tutorName || '';
+  if (els.cfgAccessKey) els.cfgAccessKey.value = cfg.accessKey || '';
   els.cfgAiProvider.value = cfg.aiProvider || 'none';
   els.cfgGeminiKey.value = cfg.geminiApiKeyMasked || '';
   els.cfgGeminiModel.value = cfg.geminiModel || 'gemini-2.5-flash';
@@ -845,6 +854,7 @@ function setupEventListeners() {
           sheetUrl: els.cfgSheetUrl.value.trim(),
           brandName: els.cfgBrandName.value.trim() || 'Ace English',
           tutorName: els.cfgTutorName.value.trim(),
+          accessKey: els.cfgAccessKey ? els.cfgAccessKey.value.trim() : '',
           aiProvider: els.cfgAiProvider.value,
           geminiApiKey: els.cfgGeminiKey.value.trim(),
           geminiModel: els.cfgGeminiModel.value.trim() || 'gemini-2.5-flash',
@@ -867,6 +877,17 @@ function setupEventListeners() {
 
 async function init() {
   setupEventListeners();
+  if (IS_STATIC && !localStorage.getItem(ACCESS_KEY_STORAGE)) {
+    const entered = prompt('Ace English Feedback Studio — Dashboard Access Key', '');
+    if (entered && entered.trim()) {
+      localStorage.setItem(ACCESS_KEY_STORAGE, entered.trim());
+    } else {
+      els.syncStatusBadge.textContent = 'Access key required';
+      els.sheetErrorBanner.textContent = 'Please enter the dashboard access key to load your Google Sheet.';
+      els.sheetErrorBanner.classList.remove('hidden');
+      return;
+    }
+  }
   await loadConfigAndRubric();
   await Promise.all([syncSheet(), loadManualReports()]);
 }
